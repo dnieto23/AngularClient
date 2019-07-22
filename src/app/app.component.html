@@ -1,0 +1,42 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<h1>Students Information</h1>
+<div *ngIf="undefined === restItems">Loading...</div>
+<div *ngIf="undefined !== restItems">
+  <h2>Filters</h2>
+  <div>
+    <label>Student Name</label>
+    <input [(ngModel)]='Register.Student' placeholder="Student's Name"/>
+  </div>
+  <div>
+      <label>Language & Arts</label>
+      <input [(ngModel)]='Register.LanguageAndArts' placeholder="Language & Arts"/>
+  </div>
+  <div>
+      <label>Science</label>
+      <input [(ngModel)]='Register.Science' placeholder="Science"/>
+  </div>
+  <div>
+      <label>Social Studies</label>
+      <input [(ngModel)]='Register.SocialStudies' placeholder="Social Studies"/>
+  </div>
+  <div>
+      <label>Maths</label>
+      <input [(ngModel)]='Register.Maths' placeholder="Maths"/>
+  </div>
+  <div>
+    <button (click)="getRestItemsMarksUpper80()">Filter by Marks Above 80</button>
+    <button (click)="getRestItemsByName(Register.Student)">Filter by Name</button>
+    <button (click)="getRestItemsByLAndA(Register.LanguageAndArts)">Filter by Language & Arts</button>
+    <button (click)="getRestItemsByScience(Register.Science)">Filter by Science</button>
+    <button (click)="getRestItemsBySocialStudies(Register.SocialStudies)">Filter by Social Studies</button>
+    <button (click)="getRestItemsByMaths(Register.Maths)">Filter by Maths</button>
+    
+  </div>
+  <ag-grid-angular 
+    style="width: 80vw;height: 220px;" 
+    class="ag-theme-balham" 
+    [rowData]="restItems"
+    [columnDefs]="columnDefs"
+    [enableSorting]="true">
+  </ag-grid-angular>
+</div>
