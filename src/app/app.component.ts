@@ -16,6 +16,13 @@ export class AppComponent implements OnInit {
   restItemsUrl = 'http://localhost:59139/api/Students/';
   httpOptions: { headers: HttpHeaders; };
   body: any;
+  showM: boolean;
+  showSS: boolean;
+  showSC: boolean;
+  showLA: boolean;
+  showS: boolean;
+  dropdownList: any;
+  dropdownSettings: any;
   constructor(private http: HttpClient) { }
   columnDefs = [
     {headerName: 'Student', field: 'Student'},
@@ -34,35 +41,78 @@ export class AppComponent implements OnInit {
 };
 
   ngOnInit() {
+    this.initFields();
+    this.initDropDown();
     this.getRestItems();
   }
 
+  initFields(): void {
+    this.showS = false;
+    this.showLA = false;
+    this.showSC = false;
+    this.showSS = false;
+    this.showM = false;
+  }
+
+  initDropDown(): void {
+    this.dropdownList = [
+      { item_id: 1, item_text: 'Student' },
+      { item_id: 2, item_text: 'Language & Arts' },
+      { item_id: 3, item_text: 'Science' },
+      { item_id: 4, item_text: 'Social Studies' },
+      { item_id: 5, item_text: 'Maths' },
+    ];
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text'
+    };
+  }
+  onItemSelect(item: any) {
+    switch (item.item_id) {
+      case 1:
+        this.showS = !this.showS;
+        this.Register.Student = this.showS ? this.Register.Student : '';
+        break;
+      case 2:
+        this.showLA = !this.showLA;
+        this.Register.LanguageAndArts = this.showS ? this.Register.LanguageAndArts : '';
+        break;
+      case 3:
+        this.showSC = !this.showSC;
+        this.Register.Science = this.showS ? this.Register.Science : '';
+        break;
+      case 4:
+        this.showSS = !this.showSS;
+        this.Register.SocialStudies = this.showS ? this.Register.SocialStudies : '';
+        break;
+      case 5:
+        this.showM = !this.showM;
+        this.Register.Maths = this.showS ? this.Register.Maths : '';
+        break;
+      default:
+        break;
+    }
+  }
   getRestItems(): void {
     this.restItemsServiceGetRestItems('GetAllData')
     .subscribe(
       restItems => {
         this.restItems = restItems;
-        console.log(this.restItems);
       }
     );
   }
-
-  // getRestItemsByName(Student: string) {
-  //   this.restItems = [];
-  //   this.restItemsServiceGetRestItems('GetRecByField?Mark=Student&Vaue=' + Student)
-  //   .subscribe(
-  //     restItems => {
-  //       this.restItems = restItems;
-  //       console.log(this.restItems);
-  //     }
-  //   );
-  // }
-
-  getRestItemsByName(Student: string) {
+  getRestItemsByFilters(s: string, la: string, sc: string, ss: string, m: string): void {
     this.restItems = [];
-    this.body = {Mark: 'Student', Value: Student};
+    this.body = {
+      Student: s,
+      LanguageAndArts: this.validateTextNumber(la),
+      Science: this.validateTextNumber(sc),
+      SocialStudies: this.validateTextNumber(ss),
+      Maths: this.validateTextNumber(m)
+    };
     console.log(this.body);
-    this.restItemsServiceGetRestItemsPost('GetByField', this.body)
+    this.restItemsServiceGetRestItemsPost('GetByFiters', this.body)
     .subscribe(
       restItems => {
         this.restItems = restItems;
@@ -70,69 +120,6 @@ export class AppComponent implements OnInit {
       }
     );
   }
-
-  getRestItemsByLAndA(Mark: string) {
-    this.restItems = [];
-    this.body = {Mark: 'LanguageAndArts', Value: Mark};
-    console.log(this.body);
-    this.restItemsServiceGetRestItemsPost('GetByField', this.body)
-    .subscribe(
-      restItems => {
-        this.restItems = restItems;
-        console.log(this.restItems);
-      }
-    );
-  }
-
-  getRestItemsByScience(Mark: string) {
-    this.restItems = [];
-    this.body = {Mark: 'Science', Value: Mark};
-    console.log(this.body);
-    this.restItemsServiceGetRestItemsPost('GetByField', this.body)
-    .subscribe(
-      restItems => {
-        this.restItems = restItems;
-        console.log(this.restItems);
-      }
-    );
-  }
-
-  getRestItemsBySocialStudies(Mark: string) {
-    this.restItems = [];
-    this.body = {Mark: 'SocialStudies', Value: Mark};
-    console.log(this.body);
-    this.restItemsServiceGetRestItemsPost('GetByField', this.body)
-    .subscribe(
-      restItems => {
-        this.restItems = restItems;
-        console.log(this.restItems);
-      }
-    );
-  }
-
-  getRestItemsByMaths(Mark: string) {
-    this.restItems = [];
-    this.body = {Mark: 'Maths', Value: Mark};
-    console.log(this.body);
-    this.restItemsServiceGetRestItemsPost('GetByField', this.body)
-    .subscribe(
-      restItems => {
-        this.restItems = restItems;
-        console.log(this.restItems);
-      }
-    );
-  }
-
-  getRestItemsMarksUpper80(): void {
-    this.restItemsServiceGetRestItems('GetMarksUp80')
-    .subscribe(
-      restItems => {
-        this.restItems = restItems;
-        console.log(this.restItems);
-      }
-    );
-  }
-
   restItemsServiceGetRestItems(met: string) {
     this.body = [];
     return this.http.get<any[]>(this.restItemsUrl + met)
@@ -148,6 +135,10 @@ export class AppComponent implements OnInit {
     console.log(register);
     return this.http.post<any[]>(this.restItemsUrl + met, register, httpOptions)
     .pipe(map(data => data));
+  }
+
+  validateTextNumber(text: string) {
+    return text === '' ? '-1' : text;
   }
 
 

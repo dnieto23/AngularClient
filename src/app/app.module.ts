@@ -4,6 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AgGridModule } from 'ag-grid-angular';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
+import { NgMultiSelectDropDownModule  } from 'ng-multiselect-dropdown';
+
 
 @NgModule({
   declarations: [
@@ -13,7 +15,8 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     HttpClientModule,
     AgGridModule.withComponents(null),
-    FormsModule
+    FormsModule,
+    NgMultiSelectDropDownModule .forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,34 +2,45 @@
 <h1>Students Information</h1>
 <div *ngIf="undefined === restItems">Loading...</div>
 <div *ngIf="undefined !== restItems">
-  <h2>Filters</h2>
   <div>
-    <label>Student Name</label>
-    <input [(ngModel)]='Register.Student' placeholder="Student's Name"/>
+    <h2>Filters</h2>
+    <div *ngIf="showS">
+      <label>Student Name</label>
+      <input [(ngModel)]='Register.Student' placeholder="Student's Name"/>
+    </div>
+    <div *ngIf="showLA">
+        <label>Language & Arts</label>
+        <input [(ngModel)]='Register.LanguageAndArts' placeholder="Language & Arts"/>
+    </div>
+    <div *ngIf="showSC">
+        <label>Science</label>
+        <input [(ngModel)]='Register.Science' placeholder="Science"/>
+    </div>
+    <div *ngIf="showSS">
+        <label>Social Studies</label>
+        <input [(ngModel)]='Register.SocialStudies' placeholder="Social Studies"/>
+    </div>
+    <div *ngIf="showM">
+        <label>Maths</label>
+        <input [(ngModel)]='Register.Maths' placeholder="Maths"/>
+    </div>
   </div>
   <div>
-      <label>Language & Arts</label>
-      <input [(ngModel)]='Register.LanguageAndArts' placeholder="Language & Arts"/>
+      <ng-multiselect-dropdown
+      [data]="dropdownList"
+      [settings]="dropdownSettings"
+      (onSelect)="onItemSelect($event)"
+      (onDeSelect)="onItemSelect($event)">
+    </ng-multiselect-dropdown>
   </div>
   <div>
-      <label>Science</label>
-      <input [(ngModel)]='Register.Science' placeholder="Science"/>
-  </div>
-  <div>
-      <label>Social Studies</label>
-      <input [(ngModel)]='Register.SocialStudies' placeholder="Social Studies"/>
-  </div>
-  <div>
-      <label>Maths</label>
-      <input [(ngModel)]='Register.Maths' placeholder="Maths"/>
-  </div>
-  <div>
-    <button (click)="getRestItemsMarksUpper80()">Filter by Marks Above 80</button>
-    <button (click)="getRestItemsByName(Register.Student)">Filter by Name</button>
-    <button (click)="getRestItemsByLAndA(Register.LanguageAndArts)">Filter by Language & Arts</button>
-    <button (click)="getRestItemsByScience(Register.Science)">Filter by Science</button>
-    <button (click)="getRestItemsBySocialStudies(Register.SocialStudies)">Filter by Social Studies</button>
-    <button (click)="getRestItemsByMaths(Register.Maths)">Filter by Maths</button>
+    <button (click)="getRestItemsByFilters(
+      Register.Student,
+      Register.LanguageAndArts,
+      Register.Science,
+      Register.SocialStudies,
+      Register.Maths)">Filter</button>
+
     
   </div>
   <ag-grid-angular 
